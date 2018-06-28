@@ -15,7 +15,6 @@ function scanFolder(homePath) {
     try{
         fs.lstatSync(homePath).isDirectory()
     }catch(e){
-        console.error(e)
         throw `${homePath} is not a folder. \n`
     }
     fs.readdirSync(homePath).forEach(file => {
@@ -24,7 +23,6 @@ function scanFolder(homePath) {
             let bFile = fs.lstatSync(fullPath).isFile()
             if (!bFile) return
             let fileContent = fs.readFileSync(fullPath, 'utf8')
-            //console.log(fileContent)
             let fileJ = JSON.parse(fileContent)
             if (fileJ.version === 3 && fileJ.address && fileJ.crypto && fileJ.id) {
                 walletObj = {
@@ -34,10 +32,9 @@ function scanFolder(homePath) {
                 wallets.push(walletObj)
             }
         } catch(e) {
-            console.error(`reading ${fullPath} as wallet json error:\n` + e)
+            // console.error(`reading ${fullPath} as wallet json error:\n` + e)
         }
     })
-    console.log(JSON.stringify(wallets))
     return wallets
 }
 

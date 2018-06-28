@@ -16,7 +16,7 @@ function scanFolder (homePath) {
   try {
     fs.lstatSync(homePath).isDirectory()
   } catch (e) {
-    throw new Error(NOT_A_DIR)
+    throw new Error(errors.NOT_A_DIR)
   }
   fs.readdirSync(homePath).forEach(file => {
     const fullPath = path.join(homePath, file)
@@ -26,7 +26,7 @@ function scanFolder (homePath) {
       let fileContent = fs.readFileSync(fullPath, 'utf8')
       let fileJ = JSON.parse(fileContent)
       if (fileJ.version === 3 && fileJ.address && fileJ.crypto && fileJ.id) {
-        walletObj = {
+        let walletObj = {
           filePath: fullPath,
           v3json: fileJ
         }
@@ -46,7 +46,7 @@ function saveWallet (manager, wallet, password, name, bOverride) {
   v3json.name = name
 
   if (manager.findWallet(v3json.address) && !bOverride) {
-    throw new Error(WALLET_ALREADY_EXIST)
+    throw new Error(errors.WALLET_ALREADY_EXIST)
   }
 
   fs.writeFileSync(filePath, JSON.stringify(v3json))
@@ -118,7 +118,7 @@ function newWalletManager (walletHomePath) {
 
   wm.importFromPrivateKey = function (key, password, name, bOverride = false) {
     if (typeof key === 'string') {
-      key = new Buffer(key, 'hex')
+      key = Buffer.from(key, 'hex')
     }
     name = name || generateWalletName()
     const wallet = Wallet.fromPrivateKey(key)

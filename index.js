@@ -115,7 +115,7 @@ function newWalletManager(walletHomePath) {
     }
 
     wm.importFromMnemonic = function(mnemonic, password, name, bOverride = false, derivePath, deriveChild) {
-        derivePath = derivePath || `m/44'/60'/0'/0` // compatible with metamask/jaxx
+        derivePath = derivePath || `m/44'/300'/0'/0` // path for genaro
         deriveChild = deriveChild || 0
         name = name || generateWalletName()
         const seed = bip39.mnemonicToSeed(mnemonic);
@@ -123,8 +123,16 @@ function newWalletManager(walletHomePath) {
         saveWallet(wallet, password, name)
     }
 
-    wm.changePassword = function(address, passoword, newPassword) {
+    wm.exportJson = function(address) {
 
+    }
+
+    wm.exportPrivateKey = function(address, password) {
+
+    }
+
+    wm.changePassword = function(address, passoword, newPassword) {
+        
     }
 
     wm.signTx = function(address, password, txParams) {
@@ -136,6 +144,10 @@ function newWalletManager(walletHomePath) {
         var serializedTx = tx.serialize()
         const rawTrans = '0x' + serializedTx.toString('hex')
         return rawTrans
+    }
+
+    wm.generateMnemonic = function(strength) {
+        return bip39.generateMnemonic(strength)
     }
 
     return wm

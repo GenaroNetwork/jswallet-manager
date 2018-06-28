@@ -39,24 +39,6 @@ function scanFolder (homePath) {
   return wallets
 }
 
-function saveWallet (manager, wallet, password, name, bOverride) {
-  const fileName = wallet.getV3Filename()
-  const filePath = path.join(manager.walletHomePath, fileName)
-  const v3json = wallet.toV3(password)
-  v3json.name = name
-
-  if (manager.findWallet(v3json.address) && !bOverride) {
-    throw new Error(errors.WALLET_ALREADY_EXIST)
-  }
-
-  fs.writeFileSync(filePath, JSON.stringify(v3json))
-  if (bOverride) {
-    manager.deleteWallet(v3json.address)
-  }
-  manager.reload()
-  return v3json
-}
-
 function newWalletManager (walletHomePath) {
   let wallets = scanFolder(walletHomePath)
   let wm = {
@@ -76,6 +58,24 @@ function newWalletManager (walletHomePath) {
       }
     }
   }
+
+  const saveWallet = (function (wallet, password, name, bOverride) {
+    const fileName = wallet.getV3Filename()
+    const filePath = path.join(this.walletHomePath, fileName)
+    const v3json = wallet.toV3(password)
+    v3json.name = name
+  
+    if (this.findWallet(v3json.address) && !bOverride) {
+      throw new Error(errors.WALLET_ALREADY_EXIST)
+    }
+  
+    fs.writeFileSync(filePath, JSON.stringify(v3json))
+    if (bOverride) {
+      this.deleteWallet(v3json.address)
+    }
+    this.reload()
+    return v3json
+  }).bind(wm)
 
   wm.reload = function () {
     wallets = scanFolder(walletHomePath)
@@ -115,7 +115,7 @@ function newWalletManager (walletHomePath) {
     }
     name = name || jsonv3.name || generateWalletName()
     const wallet = Wallet.fromV3(jsonv3, password)
-    return saveWallet(this, wallet, password, name, bOverride)
+    return saveWallet(wallet, password, name, bOverride)
   }
 
   wm.importFromPrivateKey = function (key, password, name, bOverride = false) {
@@ -124,7 +124,7 @@ function newWalletManager (walletHomePath) {
     }
     name = name || generateWalletName()
     const wallet = Wallet.fromPrivateKey(key)
-    return saveWallet(this, wallet, password, name, bOverride)
+    return saveWallet(wallet, password, name, bOverride)
   }
 
   wm.importFromMnemonic = function (mnemonic, password, name, bOverride = false, derivePath, deriveChild) {
@@ -133,7 +133,7 @@ function newWalletManager (walletHomePath) {
     name = name || generateWalletName()
     const seed = bip39.mnemonicToSeed(mnemonic)
     let wallet = hdkey.fromMasterSeed(seed).derivePath(derivePath).deriveChild(deriveChild).getWallet()
-    return saveWallet(this, wallet, password, name, bOverride)
+    return saveWallet(wallet, password, name, bOverride)
   }
 
   wm.exportJson = function (address) {

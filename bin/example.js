@@ -51,7 +51,8 @@ const jexport = wm.exportJson(address0)
 console.log(`${address0} json: ${jexport}`)
 
 wm.changePassword(address0, password, "654321")
-console.log('password changed')
+const pwdRight = wm.validatePassword(address0, "654321")
+console.log('password changed: ' + pwdRight)
 
 
 wm.deleteWallet(address1)

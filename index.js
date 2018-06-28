@@ -168,13 +168,11 @@ function newWalletManager (walletHomePath) {
     return rawTrans
   }
 
-  wm.generateMnemonic = function () {
-    return bip39.generateMnemonic.apply(null, arguments)
-  }
-
   return wm
 }
 
 module.exports = {
-  newWalletManager
+  newWalletManager,
+  validateMnemonic: bip39.validateMnemonic,
+  generateMnemonic: bip39.generateMnemonic
 }

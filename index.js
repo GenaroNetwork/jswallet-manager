@@ -6,6 +6,7 @@ const Wallet = require('ethereumjs-wallet')
 const hdkey = require('ethereumjs-wallet/hdkey')
 
 const errors = {
+    NOT_A_DIR: "path is not a valid directory",
     WALLET_NOT_FOUND: "wallet not found",
     WALLET_ALREADY_EXIST: "wallet already exist"
 }
@@ -14,8 +15,8 @@ function scanFolder(homePath) {
     let wallets = []
     try{
         fs.lstatSync(homePath).isDirectory()
-    }catch(e){
-        throw `${homePath} is not a folder. \n`
+    } catch(e) {
+        throw new Error(NOT_A_DIR)
     }
     fs.readdirSync(homePath).forEach(file => {
         const fullPath = path.join(homePath, file)

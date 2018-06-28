@@ -67,6 +67,7 @@ function newWalletManager(walletHomePath) {
             this.deleteWallet(v3json.address)
         }
         this.reload()
+        return v3json
     }
 
     wm.reload = function() {
@@ -105,13 +106,13 @@ function newWalletManager(walletHomePath) {
         }
         name = name || jsonv3.name || generateWalletName();
         const wallet = Wallet.fromV3(jsonv3, password)
-        saveWallet(wallet, password, name)
+        return saveWallet(wallet, password, name)
     }
 
     wm.importFromPrivateKey = function(key, password, name, bOverride = false) {
         name = name || generateWalletName()
         const wallet = Wallet.fromPrivateKey(key);
-        saveWallet(wallet, password, name)
+        return saveWallet(wallet, password, name)
     }
 
     wm.importFromMnemonic = function(mnemonic, password, name, bOverride = false, derivePath, deriveChild) {
@@ -120,7 +121,7 @@ function newWalletManager(walletHomePath) {
         name = name || generateWalletName()
         const seed = bip39.mnemonicToSeed(mnemonic);
         let wallet = hdkey.fromMasterSeed(seed).derivePath(derivePath).deriveChild(deriveChild).getWallet()
-        saveWallet(wallet, password, name)
+        return saveWallet(wallet, password, name)
     }
 
     wm.exportJson = function(address) {

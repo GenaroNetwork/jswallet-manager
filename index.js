@@ -110,6 +110,7 @@ function newWalletManager(walletHomePath) {
     }
 
     wm.importFromPrivateKey = function(key, password, name, bOverride = false) {
+        // TODO: check key buffer or string
         name = name || generateWalletName()
         const wallet = Wallet.fromPrivateKey(key);
         return saveWallet(wallet, password, name)
@@ -125,15 +126,19 @@ function newWalletManager(walletHomePath) {
     }
 
     wm.exportJson = function(address) {
-
+        return JSON.stringify(this.findWallet(address))
     }
 
     wm.exportPrivateKey = function(address, password) {
-
+        const v3json = this.findWallet(address)
+        const rawWallet = Wallet.fromV3(v3json, password)
+        return rawWallet.getPrivateKeyString()
     }
 
-    wm.changePassword = function(address, passoword, newPassword) {
-        
+    wm.changePassword = function(address, oldPassoword, newPassword) {
+        const v3json = this.findWallet(address)
+        const rawWallet = Wallet.fromV3(v3json, oldPassoword)
+        this.importFromPrivateKey(rawWallet.getPrivateKey(), newPassword, v3json.name, true)
     }
 
     wm.signTx = function(address, password, txParams) {

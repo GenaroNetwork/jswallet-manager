@@ -120,7 +120,9 @@ function newWalletManager(walletHomePath) {
     }
 
     wm.importFromPrivateKey = function(key, password, name, bOverride = false) {
-        // TODO: check key buffer or string
+        if(typeof key === 'string') {
+            key = new Buffer(key, 'hex')
+        }
         name = name || generateWalletName()
         const wallet = Wallet.fromPrivateKey(key);
         return saveWallet(this, wallet, password, name, bOverride)

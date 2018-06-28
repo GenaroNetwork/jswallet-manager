@@ -92,7 +92,6 @@ function newWalletManager (walletHomePath) {
     return wallets.map(w => w.v3json)
   }
 
-  // no 0x start
   wm.findWallet = function (address) {
     address = formatAddr(address)
     const found = wallets.find(w => {
@@ -103,7 +102,6 @@ function newWalletManager (walletHomePath) {
     }
   }
 
-  // no 0x start
   wm.deleteWallet = function (address) {
     address = formatAddr(address)
     const found = wallets.find(w => {

@@ -59,23 +59,23 @@ function newWalletManager (walletHomePath) {
     }
   }
 
-  const saveWallet = (function (wallet, password, name, bOverride) {
+  const saveWallet = function (wallet, password, name, bOverride) {
     const fileName = wallet.getV3Filename()
     const filePath = path.join(this.walletHomePath, fileName)
     const v3json = wallet.toV3(password)
     v3json.name = name
-  
+
     if (this.findWallet(v3json.address) && !bOverride) {
       throw new Error(errors.WALLET_ALREADY_EXIST)
     }
-  
+
     fs.writeFileSync(filePath, JSON.stringify(v3json))
     if (bOverride) {
       this.deleteWallet(v3json.address)
     }
     this.reload()
     return v3json
-  }).bind(wm)
+  }.bind(wm)
 
   wm.reload = function () {
     wallets = scanFolder(walletHomePath)
@@ -100,9 +100,9 @@ function newWalletManager (walletHomePath) {
     const found = wallets.find(w => {
       return (w.v3json.address === addr)
     })
-    if(found) {
-        fs.unlinkSync(found.filePath)
-        this.reload()
+    if (found) {
+      fs.unlinkSync(found.filePath)
+      this.reload()
     }
   }
 

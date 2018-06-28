@@ -54,6 +54,9 @@ wm.changePassword(address0, password, "654321")
 const pwdRight = wm.validatePassword(address0, "654321")
 console.log('password changed: ' + pwdRight)
 
+wm.renameWallet(address0, "new name haha")
+const found2 = wm.findWallet(address0)
+console.log(address0 + ' renamed: ' + found2.name)
 
 wm.deleteWallet(address1)
 console.log(`${address1} deleted`)

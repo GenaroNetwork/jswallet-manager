@@ -166,6 +166,18 @@ function newWalletManager (walletHomePath) {
     return this.importFromPrivateKey(rawWallet.getPrivateKey(), newPassword, v3json.name, true)
   }
 
+  wm.renameWallet = function(address, newName) {
+    address = formatAddr(address)
+    const found = wallets.find(w => {
+      return (w.v3json.address === address)
+    })
+    if (!found) {
+      throw new Error(errors.WALLET_NOT_FOUND)
+    }
+    found.v3json.name = newName
+    fs.writeFile(found.filePath, JSON.stringify(found.v3json), ()=>{})
+  }
+
   wm.signTx = function (address, password, txParams) {
     address = formatAddr(address)
     const v3json = this.findWallet(address)

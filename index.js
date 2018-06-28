@@ -179,6 +179,18 @@ function newWalletManager (walletHomePath) {
     return rawTrans
   }
 
+  wm.validatePassword = function (address, password) {
+    address = formatAddr(address)
+    const v3json = this.findWallet(address)
+    if (!v3json) throw new Error(errors.WALLET_NOT_FOUND)
+    try {
+      Wallet.fromV3(v3json, password)
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   return wm
 }
 

@@ -1,4 +1,5 @@
 const newWalletManager = require("..").newWalletManager
+const generateMnemonic = require("..").generateMnemonic
 
 const wm = newWalletManager("/Users/lishi/testkeys")
 
@@ -21,7 +22,7 @@ const jsonv3 = { version: 3,
 
 
 // 1 generate keys
-const mnemonic = wm.generateMnemonic()
+const mnemonic = generateMnemonic()
 const password = "123456"
 wm.importFromMnemonic(mnemonic, password, "wallet111", true, null, 0)
 wm.importFromMnemonic(mnemonic, password, "wallet222", true, null, 1)

@@ -169,8 +169,8 @@ function newWalletManager(walletHomePath) {
         return rawTrans
     }
 
-    wm.generateMnemonic = function(strength) {
-        return bip39.generateMnemonic(strength)
+    wm.generateMnemonic = function() {
+        return bip39.generateMnemonic.apply(null, arguments)
     }
 
     return wm

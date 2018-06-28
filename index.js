@@ -39,6 +39,13 @@ function scanFolder (homePath) {
   return wallets
 }
 
+function formatAddr(addr) {
+    if(addr.startsWith('0x')) {
+        addr = addr.substring(2)
+    }
+    return addr
+}
+
 function newWalletManager (walletHomePath) {
   let wallets = scanFolder(walletHomePath)
   let wm = {
@@ -86,9 +93,10 @@ function newWalletManager (walletHomePath) {
   }
 
   // no 0x start
-  wm.findWallet = function (addr) {
+  wm.findWallet = function (address) {
+    address = formatAddr(address)
     const found = wallets.find(w => {
-      return (w.v3json.address === addr)
+      return (w.v3json.address === address)
     })
     if (found) {
       return found.v3json
@@ -96,9 +104,10 @@ function newWalletManager (walletHomePath) {
   }
 
   // no 0x start
-  wm.deleteWallet = function (addr) {
+  wm.deleteWallet = function (address) {
+    address = formatAddr(address)
     const found = wallets.find(w => {
-      return (w.v3json.address === addr)
+      return (w.v3json.address === address)
     })
     if (found) {
       fs.unlinkSync(found.filePath)
@@ -137,12 +146,14 @@ function newWalletManager (walletHomePath) {
   }
 
   wm.exportJson = function (address) {
+    address = formatAddr(address)
     const v3json = this.findWallet(address)
     if (!v3json) throw new Error(errors.WALLET_NOT_FOUND)
     return JSON.stringify(v3json)
   }
 
   wm.exportPrivateKey = function (address, password) {
+    address = formatAddr(address)
     const v3json = this.findWallet(address)
     if (!v3json) throw new Error(errors.WALLET_NOT_FOUND)
     const rawWallet = Wallet.fromV3(v3json, password)
@@ -150,6 +161,7 @@ function newWalletManager (walletHomePath) {
   }
 
   wm.changePassword = function (address, oldPassoword, newPassword) {
+    address = formatAddr(address)
     const v3json = this.findWallet(address)
     if (!v3json) throw new Error(errors.WALLET_NOT_FOUND)
     const rawWallet = Wallet.fromV3(v3json, oldPassoword)
@@ -157,6 +169,7 @@ function newWalletManager (walletHomePath) {
   }
 
   wm.signTx = function (address, password, txParams) {
+    address = formatAddr(address)
     const v3json = this.findWallet(address)
     if (!v3json) throw new Error(errors.WALLET_NOT_FOUND)
     const rawWallet = Wallet.fromV3(v3json, password)

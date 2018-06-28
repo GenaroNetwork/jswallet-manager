@@ -3,6 +3,7 @@ const path = require('path')
 const bip39 = require('bip39')
 const EthereumTx = require('ethereumjs-tx')
 const Wallet = require('ethereumjs-wallet')
+const hdkey = require('ethereumjs-wallet/hdkey')
 
 function scanFolder(homePath) {
     let wallets = []

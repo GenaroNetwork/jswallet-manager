@@ -39,11 +39,11 @@ function scanFolder (homePath) {
   return wallets
 }
 
-function formatAddr(addr) {
-    if(addr.startsWith('0x')) {
-        addr = addr.substring(2)
-    }
-    return addr
+function formatAddr (addr) {
+  if (addr.startsWith('0x')) {
+    addr = addr.substring(2)
+  }
+  return addr
 }
 
 function newWalletManager (walletHomePath) {
@@ -166,7 +166,7 @@ function newWalletManager (walletHomePath) {
     return this.importFromPrivateKey(rawWallet.getPrivateKey(), newPassword, v3json.name, true)
   }
 
-  wm.renameWallet = function(address, newName) {
+  wm.renameWallet = function (address, newName) {
     address = formatAddr(address)
     const found = wallets.find(w => {
       return (w.v3json.address === address)
@@ -175,7 +175,7 @@ function newWalletManager (walletHomePath) {
       throw new Error(errors.WALLET_NOT_FOUND)
     }
     found.v3json.name = newName
-    fs.writeFile(found.filePath, JSON.stringify(found.v3json), ()=>{})
+    fs.writeFile(found.filePath, JSON.stringify(found.v3json), () => {})
   }
 
   wm.signTx = function (address, password, txParams) {

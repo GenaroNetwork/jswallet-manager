@@ -97,11 +97,13 @@ function newWalletManager (walletHomePath) {
 
   // no 0x start
   wm.deleteWallet = function (addr) {
-    const filePath = wallets.find(w => {
+    const found = wallets.find(w => {
       return (w.v3json.address === addr)
-    }).filePath
-    fs.unlinkSync(filePath)
-    this.reload()
+    })
+    if(found) {
+        fs.unlinkSync(found.filePath)
+        this.reload()
+    }
   }
 
   wm.importFromJson = function (json, password, name, bOverride = false) {

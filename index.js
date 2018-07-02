@@ -19,7 +19,7 @@ function scanFolder (homePath) {
     throw new Error(errors.NOT_A_DIR)
   }
   fs.readdirSync(homePath).forEach(file => {
-    if(!file.startsWith('UTC--')) return // ethereumjs-wallet default name: wallet.getV3Filename()
+    if (!file.startsWith('UTC--')) return // ethereumjs-wallet default name: wallet.getV3Filename()
     const fullPath = path.join(homePath, file)
     try {
       let bFile = fs.lstatSync(fullPath).isFile()

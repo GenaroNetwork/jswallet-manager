@@ -1,8 +1,26 @@
 const newWalletManager = require("..").newWalletManager
 const generateMnemonic = require("..").generateMnemonic
+const addressFromPrivateKey = require("..").addressFromPrivateKey
+const addressFromMnemonic = require("..").addressFromMnemonic
 
 const wm = newWalletManager("/Users/lishi/testkeys")
 
+const addrrrr = addressFromPrivateKey("cebb3666a065beb926706f2ef7e08a89cc69d053228597ed25b3248a103c592c")
+console.log(addrrrr)
+
+const mmm = generateMnemonic()
+console.log(addressFromMnemonic(mmm))
+
+
+return 
+// let t1 = (Date.now())
+// for(let i = 0; i < 10; i++) {
+//     wm.importFromPrivateKey("cebb3666a065beb926706f2ef7e08a89cc69d053228597ed25b3248a103c592c", "123456", "god wallet", true)
+// }
+// let t2 = (Date.now())
+// console.log(t2 - t1)
+
+// return 
 const jsonv3 = { version: 3,
     id: '7456871b-be58-4a57-a484-a460391e8878',
     address: '4055eb31916aa026871581f30ff03017bb2982ce',

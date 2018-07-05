@@ -207,8 +207,26 @@ function newWalletManager (walletHomePath) {
   return wm
 }
 
+function addressFromPrivateKey (key) {
+  if (typeof key === 'string') {
+    key = Buffer.from(key, 'hex')
+  }
+  const wallet = Wallet.fromPrivateKey(key)
+  return wallet.getAddressString()
+}
+
+function addressFromMnemonic (mnemonic, derivePath, deriveChild) {
+  derivePath = derivePath || `m/44'/300'/0'/0` // path for genaro
+  deriveChild = deriveChild || 0
+  const seed = bip39.mnemonicToSeed(mnemonic)
+  let wallet = hdkey.fromMasterSeed(seed).derivePath(derivePath).deriveChild(deriveChild).getWallet()
+  return wallet.getAddressString()
+}
+
 module.exports = {
   newWalletManager,
+  addressFromPrivateKey,
+  addressFromMnemonic,
   validateMnemonic: bip39.validateMnemonic,
   generateMnemonic: bip39.generateMnemonic
 }

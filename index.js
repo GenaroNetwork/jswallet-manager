@@ -71,7 +71,11 @@ function newWalletManager (walletHomePath) {
     const fileName = wallet.getV3Filename()
     const filePath = path.join(this.walletHomePath, fileName)
     const v3json = wallet.toV3(password)
-    v3json.name = name
+    if(typeof name === 'function') {
+      v3json.name = name(v3json)
+    } else {
+      v3json.name = name
+    }
 
     if (this.findWallet(v3json.address) && !bOverride) {
       throw new Error(errors.WALLET_ALREADY_EXIST)
